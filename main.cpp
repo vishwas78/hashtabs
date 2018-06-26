@@ -8,23 +8,26 @@
 //}
 
 #include<bits/stdc++.h>
+
 using namespace std;
 
 //template for generic type
 template<typename K, typename V>
 
 //Hashnode class
-class HashNode
-{
+class HashNode {
 public:
     V value;
     K key;
 
     //Constructor of hashnode
-    HashNode(K key, V value)
-    {
+    HashNode(K key, V value) {
         this->value = value;
         this->key = key;
+    }
+    HashNode(){
+        this->key=NULL;
+        this->value=NULL;
     }
 };
 
@@ -32,73 +35,66 @@ public:
 template<typename K, typename V>
 
 //Our own Hashmap class
-class HashMap
-{
+class HashMap {
     //hash element array
-    HashNode<K,V> **arr;
+    HashNode<K, V> **arr;
     int capacity;
     //current size
     int size;
     //dummy node
-    HashNode<K,V> *dummy;
+    HashNode<K, V> *dummy;
 
 public:
-    HashMap()
-    {
+    HashMap() {
         //Initial capacity of hash array
         capacity = 20;
-        size=0;
-        arr = new HashNode<K,V>*[capacity];
+        size = 0;
+        arr = new HashNode<K, V> *[capacity];
 
         //Initialise all elements of array as NULL
-        for(int i=0 ; i < capacity ; i++)
+        for (int i = 0; i < capacity; i++)
             arr[i] = NULL;
 
         //dummy node with value and key -1
-        dummy = new HashNode<K,V>(-1, -1);
+        dummy = new HashNode<K, V>(-1, -1);
     }
+
     // This implements hash function to find index
     // for a key
-    int hashCode(K key)
-    {
+    int hashCode(K key) {
         return key % capacity;
     }
 
     //Function to add key value pair
-    void insertNode(K key, V value)
-    {
-        HashNode<K,V> *temp = new HashNode<K,V>(key, value);
+    void insertNode(K key, V value) {
+        HashNode<K, V> *temp = new HashNode<K, V>(key, value);
 
         // Apply hash function to find index for given key
         int hashIndex = hashCode(key);
 
         //find next free space
-        while(arr[hashIndex] != NULL && arr[hashIndex]->key != key
-              && arr[hashIndex]->key != -1)
-        {
+        while (arr[hashIndex] != NULL && arr[hashIndex]->key != key
+               && arr[hashIndex]->key != -1) {
             hashIndex++;
             hashIndex %= capacity;
         }
 
         //if new node to be inserted increase the current size
-        if(arr[hashIndex] == NULL || arr[hashIndex]->key == -1)
+        if (arr[hashIndex] == NULL || arr[hashIndex]->key == -1)
             size++;
         arr[hashIndex] = temp;
     }
 
     //Function to delete a key value pair
-    V deleteNode(int key)
-    {
+    V deleteNode(int key) {
         // Apply hash function to find index for given key
         int hashIndex = hashCode(key);
 
         //finding the node with given key
-        while(arr[hashIndex] != NULL)
-        {
+        while (arr[hashIndex] != NULL) {
             //if node found
-            if(arr[hashIndex]->key == key)
-            {
-                HashNode<K,V> *temp = arr[hashIndex];
+            if (arr[hashIndex]->key == key) {
+                HashNode<K, V> *temp = arr[hashIndex];
 
                 //Insert dummy node here for further use
                 arr[hashIndex] = dummy;
@@ -117,16 +113,14 @@ public:
     }
 
     //Function to search the value for a given key
-    V get(int key)
-    {
+    V get(int key) {
         // Apply hash function to find index for given key
         int hashIndex = hashCode(key);
 
         //finding the node with given key
-        while(arr[hashIndex] != NULL)
-        {
+        while (arr[hashIndex] != NULL) {
             //if node found return its value
-            if(arr[hashIndex]->key == key)
+            if (arr[hashIndex]->key == key)
                 return arr[hashIndex]->value;
             hashIndex++;
             hashIndex %= capacity;
@@ -137,42 +131,67 @@ public:
     }
 
     //Return current size
-    int sizeofMap()
-    {
+    int sizeofMap() {
         return size;
     }
 
     //Return true if size is 0
-    bool isEmpty()
-    {
+    bool isEmpty() {
         return size == 0;
     }
 
     //Function to display the stored key value pairs
-    void display()
-    {
-        for(int i=0 ; i<capacity ; i++)
-        {
-            if(arr[i] != NULL && arr[i]->key != -1)
+    void display() {
+        for (int i = 0; i < capacity; i++) {
+            if (arr[i] != NULL && arr[i]->key != -1)
                 cout << "key = " << arr[i]->key
-                     <<"  value = "<< arr[i]->value << endl;
+                     << "  value = " << arr[i]->value << endl;
         }
     }
 };
 
+//template<typename K, typename V>
+//class HashTableBase {
+//private:
+//    HashNode<K, V> *arr;
+//    int capacity;
+//    int size;
+//    HashNode<K, V> *dummy;
+//
+//public:
+//    HashTableBase() {
+//        capacity = 10;
+//        size = 0;
+////        arr = new HashNode*[capacity];
+//        HashNode<K, V> temp_arr[capacity];
+//
+//
+//
+//
+//    }
+//
+//
+//};
+
 //Driver method to test map class
-int main()
-{
-    HashMap<int, int> *h = new HashMap<int, int>;
-    h->insertNode(1,1);
-    h->insertNode(2,2);
-    h->insertNode(2,3);
-    h->display();
-    cout << h->sizeofMap() <<endl;
-    cout << h->deleteNode(2) << endl;
-    cout << h->sizeofMap() <<endl;
-    cout << h->isEmpty() << endl;
-    cout << h->get(2);
+int main() {
+//    HashMap<int, int> *h = new HashMap<int, int>;
+//    h->insertNode(1,1);
+//    h->insertNode(2,2);
+//    h->insertNode(2,3);
+//    h->display();
+//    cout << h->sizeofMap() <<endl;
+//    cout << h->deleteNode(2) << endl;
+//    cout << h->sizeofMap() <<endl;
+//    cout << h->isEmpty() << endl;
+//    cout << h->get(2);
+
+//    HashNode<int, int> temp_arr[10];
+//
+//    for (int i = 0; i < 10; ++i) {
+//        temp_arr[i] = (HashNode<int, int>) NULL;
+//    }
+
 
     return 0;
 }
