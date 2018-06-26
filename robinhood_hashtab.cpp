@@ -187,9 +187,9 @@ void RobinHoodHashTable<K, V>::display() {
     cout << "current capacity: " << capacity << endl;
     cout << "currentLoadFactor: " << currentLoadFactor() << endl;
     cout << "The Hash Table is: " << endl;
-//    for (int i = 0; i < capacity; ++i) {
-//        cout << table[i].key << " : " << table[i].value << " : " << table[i].dist << endl;
-//    }
+    for (int i = 0; i < capacity; ++i) {
+        cout << table[i].key << " : " << table[i].value << " : " << table[i].dist << endl;
+    }
 }
 
 // ------------ class function ends --------------

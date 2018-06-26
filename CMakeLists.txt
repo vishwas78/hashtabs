@@ -3,5 +3,5 @@ project(hashtab)
 
 set(CMAKE_CXX_STANDARD 11)
 
-set(SOURCE_FILES robinhood_hashtab.cpp)
+set(SOURCE_FILES cuckoo_hashtab.cpp)
 add_executable(hashtab ${SOURCE_FILES})
