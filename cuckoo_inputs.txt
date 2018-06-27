@@ -1,0 +1,4 @@
+When Hash_1 = Key and Hash_2 = Key * 11
+
+Test 1:
+Keys: 7, 3, 4, 2, 12

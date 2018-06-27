@@ -35,7 +35,7 @@ class CuckooHashTable {
 public:
     CuckooHashTable() {
         tracker = 0;
-        capacity = 16;
+        capacity = 8;
         size = 0;
         table = new CuckooNode<K, V>[capacity];
         dummy.key = (K) -1;
@@ -45,7 +45,6 @@ public:
     K hashCode1(K key);
 
     K hashCode2(K key);
-//    K hashCode3(K key);     // using three hash functions gives us ability to use almost 90% of table before relocation
 
     int tableKey(K hash);
 
@@ -76,13 +75,8 @@ K CuckooHashTable<K, V>::hashCode1(K key) {
 
 template<typename K, typename V>
 K CuckooHashTable<K, V>::hashCode2(K key) {
-    return key * 4913757;
+    return key * 11;
 }
-
-//template<typename K, typename V>
-//K CuckooHashTable<K, V>::hashCode3(K key) {
-//    return key * 35984654;
-//}
 
 template<typename K, typename V>
 int CuckooHashTable<K, V>::tableKey(K hash) {
@@ -104,15 +98,18 @@ void CuckooHashTable<K, V>::relocate() {
         }
     }
     delete[] temp_table;
+    cout << "Relocation complete" << endl;
 }
 
 template<typename K, typename V>
 bool CuckooHashTable<K, V>::insert(K key, V value, bool new_element) {
-    cout << "Inserting: (" << key << "," << value << ")" << endl;
+    cout << "Inserting: (" << key << "," << value << "," << new_element << ") " << endl;
     K hash1 = hashCode1(key);
     int table_key_1 = tableKey(hash1);
     if (tracker xor key) {
+        cout << 1 << endl;
         if (table[table_key_1].key == (K) NULL || table[table_key_1].key == (K) -1 || table[table_key_1].key == key) {
+            cout << 2 << endl;
             table[table_key_1].key = key;
             table[table_key_1].value = value;
             if (new_element) {
@@ -125,6 +122,7 @@ bool CuckooHashTable<K, V>::insert(K key, V value, bool new_element) {
             int table_key_2 = tableKey(hash2);
             if (table[table_key_2].key == (K) NULL || table[table_key_2].key == (K) -1 ||
                 table[table_key_2].key == key) {
+                cout << 3 << endl;
                 table[table_key_2].key = key;
                 table[table_key_2].value = value;
                 if (new_element) {
@@ -133,6 +131,7 @@ bool CuckooHashTable<K, V>::insert(K key, V value, bool new_element) {
                 tracker = 0;
                 return true;
             } else {
+                cout << 4 << endl;
                 CuckooNode<K, V> temp_node = table[table_key_1];
                 table[table_key_1].key = key;
                 table[table_key_1].value = value;
@@ -145,24 +144,12 @@ bool CuckooHashTable<K, V>::insert(K key, V value, bool new_element) {
         }
     } else {
         relocate();
-        insert(key, value, new_element);
+        return insert(key, value, new_element);
     }
 }
 
 template<typename K, typename V>
 V CuckooHashTable<K, V>::deleteNode(K key) {
-
-    int table_key = tableKey(key);
-
-//    for (int i = 0; i < capacity; ++i) {
-//        if (table[(table_key + i) % capacity].key == key) {
-//            V value = table[(table_key + i) % capacity].value;
-//            size--;
-//            table[(table_key + i) % capacity] = dummy;
-//            return value;
-//        }
-//    }
-//    return NULL;
     K hash1 = hashCode1(key);
     int table_key1 = tableKey(hash1);
     if (table[table_key1].key == key) {
@@ -198,14 +185,6 @@ V CuckooHashTable<K, V>::get(K key) {
         else
             return NULL;
     }
-
-//    for (int i = 0; i < capacity; ++i) {
-//        if (table[(table_key + i) % capacity].key == key) {
-//            return table[(table_key + i) % capacity].value;
-//        }
-//    }
-
-//    return NULL;
 }
 
 template<typename K, typename V>
@@ -220,7 +199,6 @@ bool CuckooHashTable<K, V>::isEmpty() {
 
 template<typename K, typename V>
 void CuckooHashTable<K, V>::display() {
-//    cout << "Here! Take this for a hash table!!!" << endl;
     cout << "size of table: " << sizeofMap() << endl;
     cout << "current capacity: " << capacity << endl;
     cout << "currentLoadFactor: " << currentLoadFactor() << endl;
@@ -233,9 +211,15 @@ void CuckooHashTable<K, V>::display() {
 // ------------ class function ends --------------
 
 int main() {
+//    TODO: change the xoring scheme for tracker as it takes twice many cycles to detect the loop. This can be very sloppy if whole table is traversed in replacing
+//    int test_arr[] = {1, 7, 3, 12, 2, 4};
+    int test_arr[] = {3658, 1829, 7236, 728, 1088, 4022, 3469, 2889, 1550, 3814, 1906, 6297, 9620, 4910, 5963, 6391,
+                      8062};
+
     CuckooHashTable<int, int> table;
-    for (int i = 10; i <= 30; i++) {
-        table.insert(i, i);
+    for (int i = 0; i < sizeof(test_arr) / sizeof(test_arr[0]); i++) {
+        cout << test_arr[i] << endl;
+        table.insert(test_arr[i], i + 1);
     }
     table.display();
     return 0;
