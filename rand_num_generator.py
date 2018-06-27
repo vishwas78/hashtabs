@@ -1,20 +1,27 @@
 import random
+import matplotlib.pyplot as plt
+
+
+def HashCalc(key):
+    return key % 20000
+
 
 random_nums = []
 
-for i in range(50):
-    x = random.randrange(1, 10000)
-    if x not in random_nums:
-        random_nums.append(x)
-        # if x not in random_nums:
-        #     random_nums[x] = 0
-        # random_nums[x] += 1
 
-print(random_nums)
-# for k in random_nums.keys():
-#     print("{}: {}".format(k, random_nums[k]))
+i = 10000000
+while i < 10020000:
+    if not random.randrange(10):
+        i += random.randrange(0, 50)
+    random_nums.append(i)
+    i += 1
 
+# print(random_nums)
 
-{3658, 1829, 7236, 728, 1088, 4022, 3469, 2889, 1550, 3814, 1906, 6297, 9620, 4910, 5963, 6391, 8062, 2150, 1282, 4342,
- 2086, 85, 643, 9603, 1958, 2057, 7650, 7838, 9846, 821, 4418, 4993, 1277, 9192, 8777, 6595, 1714, 483, 4998, 7703,
- 8744, 6200, 2204, 7457, 1479, 4607, 455, 6581, 2743, 8798}
+hashes = [HashCalc(k) for k in random_nums]
+
+differences = [hashes[x] - hashes[x - 1] for x in range(1, len(hashes))]
+
+# plt.hist(X=k ,bins=[x for x in range(100)], x=k)
+plt.scatter([x for x in range(len(differences))], differences)
+plt.show()
